@@ -9,16 +9,17 @@ import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import InputWithLabel from "@/components/InputWithLabel/InputWithLabel";
 import Swal from "sweetalert2";
 
+////////////////////////////////////////////////////////////
+
 const LoginForm = () => {
   const { login } = useAuthContext();
   const router = useRouter();
-
 
   const handleResetForm = () => {
     formik.resetForm();
   };
 
-  const handleGoogleLogin = () => { 
+  const handleGoogleLogin = () => {
     router.push(`${process.env.NEXT_PUBLIC_API_URL}/auth/google/login`);
   };
 
@@ -38,15 +39,14 @@ const LoginForm = () => {
         },
       });
 
+      const success = await postData(values);
+      const timeoutId = setTimeout(() => {
+        Swal.close();
+      }, 500);
 
-        const success = await postData(values);
-        const timeoutId = setTimeout(() => {
-          Swal.close();
-        }, 500);
-  
-        setTimeout(() => {
-          clearInterval(timeoutId); 
-        }, 700);
+      setTimeout(() => {
+        clearInterval(timeoutId);
+      }, 700);
       if (success.success) {
         setTimeout(() => {
           if (success.token) {
@@ -55,7 +55,6 @@ const LoginForm = () => {
           handleResetForm();
           router.push("/");
         }, 900);
-        
       } else {
         console.log("Error:", success.message);
       }
@@ -104,28 +103,28 @@ const LoginForm = () => {
           </div>
 
           <SubmitButton text="Ingresar" />
-          </form>
-          <div className="mt-1 text-center">
-            <p className="text-base text-customPalette-black">
-              ¿Todavia no tenes cuenta?&nbsp;
-              <a
-                href="/register"
-                className="text-customPalette-black text-lg hover:text-customPalette-bluedark underline"
-              >
-                Registrate
-              </a>
-            </p>  
-            </div>
-            <div className="mt-10 text-center">  
-            <button 
-              onClick={handleGoogleLogin}
-              className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600"
+        </form>
+        <div className="mt-1 text-center">
+          <p className="text-base text-customPalette-black">
+            ¿Todavia no tenes cuenta?&nbsp;
+            <a
+              href="/register"
+              className="text-customPalette-black text-lg hover:text-customPalette-bluedark underline"
             >
-              Ingresa con Google
-            </button>
-          </div>
+              Registrate
+            </a>
+          </p>
         </div>
-      </section>
+        <div className="mt-10 text-center">
+          <button
+            onClick={handleGoogleLogin}
+            className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600"
+          >
+            Ingresa con Google
+          </button>
+        </div>
+      </div>
+    </section>
   );
 };
 
